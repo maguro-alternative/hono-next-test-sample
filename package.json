@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "drizzle-kit": "^0.26.2",
+    "drizzle-orm": "^0.35.1",
     "hono": "^4.6.5",
     "next": "14.2.15",
     "react": "^18",
