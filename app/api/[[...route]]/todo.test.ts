@@ -17,7 +17,6 @@ describe('GET /', () => {
         fixture = await fixtureBuild(fixture,
           newTodo(
             (todo) => {
-              todo.id = 1056;
               todo.name = '雪泉';
               todo.done = false;
             }
@@ -30,9 +29,11 @@ describe('GET /', () => {
         expect(await res.json()).toEqual({
           todos: [
             {
-              id: 1056,
+              id: fixture.todos[0].id,
               name: '雪泉',
-              done: false
+              done: false,
+              created_at: fixture.todos[0].createdAt.toJSON(),
+              updated_at: fixture.todos[0].updatedAt.toJSON()
             }
           ]
         });
@@ -45,4 +46,8 @@ describe('GET /', () => {
       }
     }
   })
+});
+
+afterAll(() => {
+  pool.end();
 });
