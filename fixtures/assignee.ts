@@ -1,5 +1,12 @@
-import { Fixture, ModelConnector, Assignee } from './fixtures';
-import { assignees } from "../db/schema"
+import { Fixture, ModelConnector } from './fixtures';
+import { assignees } from "../db/schema";
+
+export interface Assignee {
+  todoId: number;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 const newAssignee = function(
   setter: ((Assignee: Assignee) => void)
@@ -8,6 +15,8 @@ const newAssignee = function(
   const assignee:Assignee = {
     todoId: 0,
     name: "todo",
+    createdAt: new Date(),
+    updatedAt: new Date()
   };
 
   return new ModelConnector(
@@ -30,7 +39,9 @@ const newAssignee = function(
         .insert(assignees)
         .values({
           todoId: assignee.todoId,
-          name: assignee.name
+          name: assignee.name,
+          created_at: assignee.createdAt,
+          updated_at: assignee.updatedAt
         })
         .returning();
       assignee.todoId = t[0].todoId;
