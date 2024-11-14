@@ -1,17 +1,8 @@
 // fixtures.ts
 import { Bindings, db } from "../db/drizzle";
 import { strict as assert } from 'assert';
-
-export interface Todo {
-  id: number;
-  name: string;
-  done: boolean;
-}
-
-export interface Assignee {
-  todoId: number;
-  name: string;
-}
+import { Todo } from "./todo";
+import { Assignee } from "./assignee";
 
 export interface Fixture {
   todos : Todo[];
