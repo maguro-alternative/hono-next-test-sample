@@ -1,1 +1,3 @@
 ## Hono+NextjsのDBテストサンプル
+
+jest+drizzle
