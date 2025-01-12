@@ -10,7 +10,7 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 const db = drizzle(pool, { schema: { todos } })
 
 describe('GET /', () => {
-  it('should return all bwhs', async () => {
+  it('should return all todos', async () => {
     try {
       await db.transaction(async (tx) => {
         let fixture = newFixture(tx);
