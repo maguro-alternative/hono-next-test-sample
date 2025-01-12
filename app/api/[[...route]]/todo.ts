@@ -6,7 +6,7 @@ import { BlankInput } from "hono/types";
 
 export async function todosGet(c:Context<{
 	Bindings: Bindings;
-}, "/api/bwhs", BlankInput>) {
+}, "/api/todos", BlankInput>) {
 	// クエリパラメータの取得
 	// const { q, limit, offset } = c.req.query()
 	const todoAll = await c.env.DB.select().from(todos)
