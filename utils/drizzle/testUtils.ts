@@ -1,8 +1,13 @@
 import { TransactionRollbackError } from 'drizzle-orm';
+import { PgTransaction } from 'drizzle-orm/pg-core';
+import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 
-export async function withRollback(db: any, fn: (tx: any) => Promise<void>) {
+export async function withRollback<TSchema extends Record<string, unknown>>(
+  db: PostgresJsDatabase<TSchema>,
+  fn: (tx: PgTransaction<any, any, any>) => Promise<void>
+) {
   try {
-    await db.transaction(async (tx: any) => {
+    await db.transaction(async (tx) => {
       try {
         await fn(tx);
       } finally {
