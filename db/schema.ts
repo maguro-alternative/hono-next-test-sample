@@ -10,13 +10,13 @@ export const todos = pgTable('todos', {
   id: serial().primaryKey().notNull(),
   name: text().notNull(),
   done: boolean().notNull(),
-  created_at: timestamp(),
-  updated_at: timestamp(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
 
 export const assignees = pgTable('assignees', {
   todoId: integer().primaryKey().references(() => todos.id),
   name: text().notNull(),
-  created_at: timestamp(),
-  updated_at: timestamp(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
