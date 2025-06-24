@@ -1,19 +1,14 @@
 import { Fixture, ModelConnector } from './fixtures';
 import { todos } from "../db/schema"
+import { InferSelectModel } from "drizzle-orm";
 
-export interface Todo {
-  id: number;
-  name: string;
-  done: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
+export type Todo = InferSelectModel<typeof todos>;
 
 const newTodo = function(
   setter: ((Todo: Todo) => void)
 ): ModelConnector {
 
-  const todo:Todo = {
+  const todo = {
     id: 0,
     name: "todo",
     done: false,
@@ -39,12 +34,7 @@ const newTodo = function(
     async (fixture: Fixture) => {
       const t = await fixture.dbv1
         .insert(todos)
-        .values({
-          name: todo.name,
-          done: todo.done,
-          created_at: todo.createdAt,
-          updated_at: todo.updatedAt
-        })
+        .values(todo)
         .returning();
       todo.id = t[0].id;
     }
