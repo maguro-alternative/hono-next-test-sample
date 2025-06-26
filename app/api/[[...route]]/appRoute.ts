@@ -4,8 +4,18 @@ import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 
 import {
-  todosGet
+  todosGet,
+  todoPost
 } from "./todo";
+
+const todoSchema = z.object({
+  name: z.string(),
+  done: z.boolean()
+});
+
+const todoSchemas = z.object({
+  todos: z.array(todoSchema)
+});
 
 // basePath は API ルートのベースパスを指定します
 // 以降、新たに生やす API ルートはこのパスを基準に追加されます
@@ -19,6 +29,9 @@ app.use((c, next) => {
 
 app.get("/todos", async (c) => {
   return await todosGet(c);
+});
+app.post("/todos", zValidator("json", todoSchemas), async (c) => {
+  return await todoPost(c);
 });
 
 export default app;
