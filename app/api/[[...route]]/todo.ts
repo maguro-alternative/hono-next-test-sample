@@ -13,5 +13,24 @@ export async function todosGet(c:Context<{
 
 	return c.json({
 		todos:todoAll
-	})
-}
+	});
+};
+
+export async function todoPost(c:Context<{
+  Bindings: Bindings;
+}, "/api/todos", {
+  in: any;
+	out: {
+		json: any;
+	};
+}>) {
+  const data = c.req.valid("json")
+  const todo = await c.env.DB
+            .insert(todos)
+            .values(data.todos)
+            .returning();
+
+  return c.json({
+    todos: todo
+  });
+};
