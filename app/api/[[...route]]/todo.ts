@@ -25,10 +25,22 @@ export async function todoPost(c:Context<{
 	};
 }>) {
   const data = c.req.valid("json")
-  const todo = await c.env.DB
+  const results = await c.env.DB
             .insert(todos)
-            .values(data.todos)
+            .values(data.todos.map((todo: any) => ({
+              ...todo,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            })))
             .returning();
+
+  const todo = results.map(t => ({
+    id: t.id,
+    name: t.name,
+    done: t.done,
+    created_at: t.createdAt,
+    updated_at: t.updatedAt,
+  }));
 
   return c.json({
     todos: todo
