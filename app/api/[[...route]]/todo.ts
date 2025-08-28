@@ -19,9 +19,24 @@ export async function todosGet(c:Context<{
 export async function todoPost(c:Context<{
   Bindings: Bindings;
 }, "/api/todos", {
-  in: any;
+  in: {
+    json: {
+      todos: {
+        name: string;
+        done: boolean;
+      }[];
+    }
+  };
 	out: {
-		json: any;
+		json: {
+      todos: {
+        id: number;
+        name: string;
+        done: boolean;
+        created_at: string;
+        updated_at: string;
+      }[];
+    }
 	};
 }>) {
   const data = c.req.valid("json")
