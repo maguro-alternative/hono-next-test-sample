@@ -10,7 +10,7 @@ export type Bindings = {
 }
 
 export const pool = postgres(
-  `postgres://${process.env.DB_HOST}:5432/${process.env.DB_NAME}?user=${process.env.DB_USER}&password=${process.env.DB_PASSWORD}&sslmode=disable`,
+  process.env.DATABASE_URL || `postgres://${process.env.DB_HOST}:5432/${process.env.DB_NAME}?user=${process.env.DB_USER}&password=${process.env.DB_PASSWORD}&sslmode=disable`,
 );
 
 export const db = drizzle(pool);
