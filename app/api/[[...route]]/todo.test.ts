@@ -41,7 +41,48 @@ describe('GET /', () => {
   })
 });
 
-
+describe('POST /', () => {
+  it('should create a new todo', async () => {
+    try {
+      await db.transaction(async (tx) => {
+        const res = await app.request('/api/todos', {
+          method: 'POST',
+          body: JSON.stringify({
+            todos: [
+              {
+                name: '雪泉',
+                done: false
+              }
+            ]
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }, {
+          DB: tx,
+        })
+        expect(res.status).toBe(200);
+        expect(await res.json()).toEqual({
+          todos: [
+            {
+              id: expect.any(Number),
+              name: '雪泉',
+              done: false,
+              created_at: expect.any(String),
+              updated_at: expect.any(String)
+            }
+          ]
+        });
+        tx.rollback();
+      });
+    } catch (e) {
+      if (!(e instanceof TransactionRollbackError)) {
+        console.error(e);
+        throw new Error('Unexpected error');
+      }
+    }
+  })
+});
 
 afterAll(() => {
   pool.end();
