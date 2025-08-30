@@ -6,10 +6,13 @@ export async function withRollback<TSchema extends Record<string, unknown>>(
   db: PostgresJsDatabase<TSchema>,
   fn: (tx: PgTransaction<any, any, any>) => Promise<void>
 ) {
+  let error: unknown;
   try {
     await db.transaction(async (tx) => {
       try {
         await fn(tx);
+      } catch (e) {
+        error = e;
       } finally {
         tx.rollback();
       }
@@ -19,5 +22,8 @@ export async function withRollback<TSchema extends Record<string, unknown>>(
       console.error(e);
       throw new Error('Unexpected error');
     }
+  }
+  if (error) {
+    throw error;
   }
 }
