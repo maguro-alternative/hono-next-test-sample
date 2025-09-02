@@ -1,12 +1,8 @@
 import { Fixture, ModelConnector } from './fixtures';
 import { assignees } from "../db/schema";
+import { InferSelectModel } from "drizzle-orm";
 
-export interface Assignee {
-  todoId: number;
-  name: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+export type Assignee = InferSelectModel<typeof assignees>;
 
 const newAssignee = function(
   setter: ((Assignee: Assignee) => void)
@@ -37,14 +33,9 @@ const newAssignee = function(
     async (fixture: Fixture) => {
       const t = await fixture.dbv1
         .insert(assignees)
-        .values({
-          todoId: assignee.todoId,
-          name: assignee.name,
-          created_at: assignee.createdAt,
-          updated_at: assignee.updatedAt
-        })
+        .values(assignee)
         .returning();
-      assignee.todoId = t[0].todoId;
+      assignee.todoId = t.at(0)!.todoId;
     }
   );
 }
